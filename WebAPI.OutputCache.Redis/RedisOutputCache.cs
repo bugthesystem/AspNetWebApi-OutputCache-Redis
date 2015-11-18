@@ -41,7 +41,10 @@ namespace WebAPI.OutputCache.Redis
         public T Get<T>(string key) where T : class
         {
             string redisValue = DB.StringGet(key);
-            return _jsonSerializer.DeserializeObject<T>(redisValue);
+            if (!string.IsNullOrEmpty(redisValue))
+                return _jsonSerializer.DeserializeObject<T>(redisValue);
+
+            return null;
         }
 
         public object Get(string key)
@@ -61,7 +64,7 @@ namespace WebAPI.OutputCache.Redis
 
         public void Add(string key, object o, DateTimeOffset expiration, string dependsOnKey = null)
         {
-            DB.StringSet(key, _jsonSerializer.SerializeObject(o), expiration.Offset);
+            DB.StringSet(key, _jsonSerializer.SerializeObject(o), TimeSpan.FromTicks(expiration.DateTime.ToUniversalTime().Ticks));
         }
 
         public IEnumerable<string> AllKeys
