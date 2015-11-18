@@ -34,7 +34,7 @@ namespace WebAPI.OutputCache.Redis
             //AutoInvalidateCacheOutputAttribute and InvalidateCacheOutputAttribute uses this method.
             //TODO: delete by pattern 
             //EVAL "return redis.call('del', unpack(redis.call('keys', ARGV[1])))" 0 prefix:*
-            //CAUTION : deleting key please use scan 
+            //CAUTION : while deleting keys please use scan 
             DB.KeyDelete(key);
         }
 
