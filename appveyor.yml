@@ -1,0 +1,11 @@
+configuration: Release
+branches:
+  only:
+    - master
+
+before_build:
+  - nuget restore WebAPI.OutputCache.Redis.sln
+
+build:
+  project: WebAPI.OutputCache.Redis.sln       
+  verbosity: minimal
