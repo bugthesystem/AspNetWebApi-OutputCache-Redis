@@ -56,7 +56,7 @@ namespace WebAPI.OutputCache.Redis.Tests.Methods
 
             var key = fixture.Id.ToString();
 
-            var expiration = DateTime.UtcNow.AddSeconds(60);
+            var expiration = DateTime.Now.AddSeconds(60);
 
             fixture.ExpireAt = expiration;
 
@@ -65,6 +65,7 @@ namespace WebAPI.OutputCache.Redis.Tests.Methods
             var result = RedisApiOutputCache.Get<UserFixture>(key);
 
             //todo: would be good to check they are the same value.. without this rubbish!
+            //TODO: Jil seralize date as UTC by default, here is more detail https://github.com/kevin-montrose/Jil/issues/129
             expiration.Day.ShouldBeEquivalentTo(result.ExpireAt.Day);
             expiration.Month.ShouldBeEquivalentTo(result.ExpireAt.Month);
             expiration.Year.ShouldBeEquivalentTo(result.ExpireAt.Year);

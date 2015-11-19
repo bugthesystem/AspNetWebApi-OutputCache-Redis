@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Jil;
 using StackExchange.Redis;
 using WebApi.OutputCache.Core.Cache;
 
@@ -11,12 +12,14 @@ namespace WebAPI.OutputCache.Redis
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IRedisConnectionSettings _connectionSettings;
         private readonly IConnectionMultiplexer _multiplexer;
+        readonly Options _options;
 
         public RedisOutputCache(IJsonSerializer jsonSerializer, IRedisConnectionSettings connectionSettings)
         {
             _jsonSerializer = jsonSerializer;
             _connectionSettings = connectionSettings;
             _multiplexer = ConnectionMultiplexer.Connect(_connectionSettings.ConnectionString);
+            _options = null;//TODO:
         }
 
         private IDatabase DB
@@ -41,8 +44,9 @@ namespace WebAPI.OutputCache.Redis
         public T Get<T>(string key) where T : class
         {
             string redisValue = DB.StringGet(key);
+
             if (!string.IsNullOrEmpty(redisValue))
-                return _jsonSerializer.DeserializeObject<T>(redisValue);
+                return _jsonSerializer.DeserializeObject<T>(redisValue, _options);
 
             return null;
         }
@@ -64,7 +68,8 @@ namespace WebAPI.OutputCache.Redis
 
         public void Add(string key, object o, DateTimeOffset expiration, string dependsOnKey = null)
         {
-            DB.StringSet(key, _jsonSerializer.SerializeObject(o), TimeSpan.FromTicks(expiration.DateTime.ToUniversalTime().Ticks));
+            TimeSpan timeSpan = expiration.DateTime.Subtract(DateTime.Now);
+            DB.StringSet(key, _jsonSerializer.SerializeObject(o, _options), timeSpan);
         }
 
         public IEnumerable<string> AllKeys

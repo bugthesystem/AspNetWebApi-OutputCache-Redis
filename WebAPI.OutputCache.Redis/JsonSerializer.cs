@@ -7,14 +7,14 @@ namespace WebAPI.OutputCache.Redis
     /// </summary>
     public class JsonSerializer : IJsonSerializer
     {
-        public T DeserializeObject<T>(string json)
+        public T DeserializeObject<T>(string json, Options options = null)
         {
-            return JSON.Deserialize<T>(json);
+            return JSON.Deserialize<T>(json,options);
         }
 
-        public string SerializeObject<T>(T value)
+        public string SerializeObject<T>(T value, Options options = null)
         {
-            return JSON.Serialize(value);
+            return JSON.Serialize(value, options);
         }
     }
 }

@@ -65,9 +65,9 @@ namespace WebAPI.OutputCache.Redis.Tests.Methods
         {
             //TODO: FIX ME
             var fixture = FixtureRepository.Create<UserFixture>();
-            RedisApiOutputCache.Add("expired-item", fixture, DateTime.UtcNow.AddHours(-1));
+            RedisApiOutputCache.Add("expired-item", fixture, DateTime.Now.AddSeconds(3));
 
-            Thread.Sleep(10000);
+            Thread.Sleep(TimeSpan.FromSeconds(5));
 
             var result = RedisApiOutputCache.Get<UserFixture>("expired-item");
 
