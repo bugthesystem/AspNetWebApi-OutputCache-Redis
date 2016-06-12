@@ -22,15 +22,7 @@ namespace WebAPI.OutputCache.Redis
             _options = null;//TODO:
         }
 
-        private IDatabase DB
-        {
-            get
-            {
-                IDatabase database = _multiplexer.GetDatabase(_connectionSettings.Db);
-                return database;
-            }
-
-        }
+        private IDatabase DB => _multiplexer.GetDatabase(_connectionSettings.Db);
 
         public void RemoveStartsWith(string key)
         {
@@ -72,13 +64,7 @@ namespace WebAPI.OutputCache.Redis
             DB.StringSet(key, _jsonSerializer.SerializeObject(o, _options), timeSpan);
         }
 
-        public IEnumerable<string> AllKeys
-        {
-            get
-            {
-                //TODO: use SCAN to get keys
-                return Enumerable.Empty<string>();
-            }
-        }
+        //TODO: use SCAN to get keys
+        public IEnumerable<string> AllKeys => Enumerable.Empty<string>();
     }
 }
