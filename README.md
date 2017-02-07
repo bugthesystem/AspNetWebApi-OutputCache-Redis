@@ -14,3 +14,8 @@ var mycache = new RedisOutputCache(new JsonSerializer(), _connectionSettings);
 //instance
 configuration.CacheOutputConfiguration().RegisterCacheOutputProvider(() => mycache);
 ```
+
+For more information;
+https://github.com/filipw/Strathweb.CacheOutput#server-side-caching
+
+### License (MIT)
