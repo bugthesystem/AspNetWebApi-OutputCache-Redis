@@ -18,4 +18,5 @@ configuration.CacheOutputConfiguration().RegisterCacheOutputProvider(() => mycac
 For more information;
 https://github.com/filipw/Strathweb.CacheOutput#server-side-caching
 
-### License (MIT)
+### License 
+MIT
